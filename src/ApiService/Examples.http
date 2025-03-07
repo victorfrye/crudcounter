@@ -1,0 +1,12 @@
+@WebApi_HostAddress = https://localhost:7558
+
+### Get liveness
+GET {{WebApi_HostAddress}}/alive
+Accept: application/json
+
+### Get health
+GET {{WebApi_HostAddress}}/health
+Accept: application/json
+
+### Get OpenAPI document
+GET {{WebApi_HostAddress}}/openapi/v1.json
