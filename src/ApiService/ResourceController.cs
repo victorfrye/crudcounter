@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 
 namespace VictorFrye.SimpleCrud.ApiService;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/resources")]
 public class ResourceController(ResourceDbContext context) : ControllerBase
 {
 
@@ -23,6 +24,7 @@ public class ResourceController(ResourceDbContext context) : ControllerBase
     }
 
     [HttpGet]
+    [OutputCache(Duration = 5)]
     public async Task<IActionResult> ReadResources()
     {
         var resources = await context.Resources.ToListAsync();
@@ -31,6 +33,7 @@ public class ResourceController(ResourceDbContext context) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [OutputCache(Duration = 5)]
     public async Task<IActionResult> ReadResourceById(Guid id, CancellationToken cancellationToken)
     {
         var resource = await context.Resources.FindAsync([id], cancellationToken);
@@ -71,7 +74,7 @@ public class ResourceController(ResourceDbContext context) : ControllerBase
         return Ok(existingResource);
     }
 
-    [HttpPatch("{id:guid}/count")]
+    [HttpPatch("{id:guid}/count/{count:int}")]
     public async Task<IActionResult> UpdateResourceCount(Guid id, int count, CancellationToken cancellationToken)
     {
         var resource = await context.Resources.FindAsync([id], cancellationToken);

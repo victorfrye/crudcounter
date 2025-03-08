@@ -8,16 +8,15 @@ using VictorFrye.SimpleCrud.Extensions.ServiceDefaults;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddRedisClient(connectionName: "cache");
-builder.AddSqlServerDbContext<ResourceDbContext>(connectionName: "db",
+builder.AddRedisOutputCache("cache");
+builder.AddSqlServerDbContext<ResourceDbContext>("db",
     configureSettings: static settings => settings.DisableRetry = true,
     configureDbContextOptions: static options =>
-        options
-            .UseSeeding(static (context, _) => context.SeedMockData())
-            .UseAsyncSeeding(static async (context, _, cancellationToken) => await context.SeedMockDataAsync(cancellationToken))
+        options.UseSeeding(static (context, _) => context.SeedMockData())
+               .UseAsyncSeeding(static async (context, _, cancellationToken) => await context.SeedMockDataAsync(cancellationToken))
 );
 
-builder.Services.AddProblemDetails(); // TODO: What is this?
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers()
     .AddJsonOptions(static options =>
@@ -50,11 +49,14 @@ builder.Services.AddOpenApi(static options =>
 var app = builder.Build();
 
 app.UseExceptionHandler();
-
-string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+app.UseOutputCache();
 
 app.MapDefaultEndpoints();
 app.MapOpenApi().CacheOutput();
+
+app.MapControllerRoute(name: "resource",
+                       pattern: "api/resources/{id?}",
+                       defaults: new { controller = "Resource" });
 
 app.UseHttpsRedirection();
 

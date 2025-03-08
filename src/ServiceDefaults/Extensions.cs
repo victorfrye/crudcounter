@@ -72,7 +72,18 @@ public static class Extensions
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
+            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"])
+            .AddResourceUtilizationHealthCheck(static options =>
+            {
+                var thresholds = new ResourceUsageThresholds()
+                {
+                    DegradedUtilizationPercentage = 80,
+                    UnhealthyUtilizationPercentage = 90,
+                };
+
+                options.CpuThresholds = thresholds;
+                options.MemoryThresholds = thresholds;
+            }, ["live"]);
 
         return builder;
     }
@@ -106,7 +117,7 @@ public static class Extensions
 
             foreach (var entry in report.Entries)
             {
-                writer.WriteStartObject(entry.Key);
+                writer.WriteStartObject(entry.Key.Replace(" ", string.Empty));
                 writer.WriteString("status",
                     entry.Value.Status.ToString());
                 writer.WriteString("description",
