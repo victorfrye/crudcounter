@@ -1,12 +1,60 @@
-@WebApi_HostAddress = https://localhost:7558
+@apiUrl = https://localhost:7558
+
+@foodId = 0195725a-eb24-7f14-8b2f-d131671684f1
+@woodId = 0195725b-5031-72cc-8969-16dd38932381
+@goldId = 0195725b-b77e-7ed0-9387-9dca428f3337
+@stoneId = 0195725b-ed2f-7842-8305-ceb37b249472
 
 ### Get liveness
-GET {{WebApi_HostAddress}}/alive
+GET {{apiUrl}}/alive
 Accept: application/json
 
 ### Get health
-GET {{WebApi_HostAddress}}/health
+GET {{apiUrl}}/health
 Accept: application/json
 
 ### Get OpenAPI document
-GET {{WebApi_HostAddress}}/openapi/v1.json
+GET {{apiUrl}}/openapi/v1.json
+Accept: application/json
+
+### Get all resources
+GET {{apiUrl}}/api/resources
+Accept: application/json
+
+### Get Food resource by ID
+GET {{apiUrl}}/api/resources/{{foodId}}
+Accept: application/json
+
+### Create Water resource
+# @name water
+POST {{apiUrl}}/api/resources
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Water",
+  "count": 200
+}
+
+### Update Water resource to Energy
+# @name energy
+PUT {{apiUrl}}/api/resources/{{water.response.body.$.id}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Energy",
+  "count": 100
+}
+
+### Update Gold count
+PATCH {{apiUrl}}/api/resources/{{goldId}}/count/200
+Accept: application/json
+
+### Delete energy
+DELETE {{apiUrl}}/api/resources/{{energy.response.body.$.id}}
+Accept: application/json
+
+### Validate back to stone age
+GET {{apiUrl}}/api/resources/{{energy.response.body.$.id}}
+Accept: application/json
