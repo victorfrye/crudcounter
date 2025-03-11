@@ -1,9 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var sql = builder.AddSqlServer("sql")
-                .AddDatabase("db");
+                 .WithLifetime(ContainerLifetime.Persistent)
+                 .AddDatabase("db");
 
-var cache = builder.AddRedis("cache");
+var cache = builder.AddRedis("cache")
+                   .WithLifetime(ContainerLifetime.Persistent);
 
 var api = builder.AddProject<Projects.ApiService>("api")
     .WithReference(sql)

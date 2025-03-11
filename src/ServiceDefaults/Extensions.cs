@@ -9,6 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ServiceDiscovery;
+
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
@@ -17,6 +18,7 @@ namespace VictorFrye.SimpleCrud.Extensions.ServiceDefaults;
 
 public static class Extensions
 {
+    #region defaults
     public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.ConfigureOpenTelemetry();
@@ -69,10 +71,11 @@ public static class Extensions
         return builder;
     }
 
+    #endregion
+
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"])
             .AddResourceUtilizationHealthCheck(static options =>
             {
                 var thresholds = new ResourceUsageThresholds()
@@ -83,7 +86,7 @@ public static class Extensions
 
                 options.CpuThresholds = thresholds;
                 options.MemoryThresholds = thresholds;
-            }, ["live"]);
+            }, ["util"]);
 
         return builder;
     }
@@ -92,13 +95,15 @@ public static class Extensions
     {
         app.MapHealthChecks("/health", new HealthCheckOptions
         {
-            ResponseWriter = WriteHealthResponse,
+            //ResponseWriter = WriteHealthResponse,
+            Predicate = _ => false
+            //Predicate = r => r.Tags.Contains("util")
+
         });
 
         app.MapHealthChecks("/alive", new HealthCheckOptions
         {
-            ResponseWriter = WriteHealthResponse,
-            Predicate = r => r.Tags.Contains("live")
+            Predicate = _ => false
         });
 
         return app;
@@ -113,6 +118,8 @@ public static class Extensions
         {
             writer.WriteStartObject();
             writer.WriteString("status", report.Status.ToString());
+            writer.WriteString("totalDuration", report.TotalDuration.ToString());
+
             writer.WriteStartObject("results");
 
             foreach (var entry in report.Entries)
@@ -120,8 +127,12 @@ public static class Extensions
                 writer.WriteStartObject(entry.Key.Replace(" ", string.Empty));
                 writer.WriteString("status",
                     entry.Value.Status.ToString());
+                writer.WriteString("duration",
+                    entry.Value.Duration.ToString());
                 writer.WriteString("description",
                     entry.Value.Description);
+                writer.WriteString("exception",
+                    entry.Value.Exception?.ToString());
                 writer.WriteStartObject("data");
 
                 foreach (var item in entry.Value.Data)
