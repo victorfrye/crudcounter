@@ -72,7 +72,6 @@ public static class Extensions
     public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddHealthChecks()
-            .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"])
             .AddResourceUtilizationHealthCheck(static options =>
             {
                 var thresholds = new ResourceUsageThresholds()
@@ -83,7 +82,7 @@ public static class Extensions
 
                 options.CpuThresholds = thresholds;
                 options.MemoryThresholds = thresholds;
-            }, ["live"]);
+            });
 
         return builder;
     }
@@ -97,8 +96,7 @@ public static class Extensions
 
         app.MapHealthChecks("/alive", new HealthCheckOptions
         {
-            ResponseWriter = WriteHealthResponse,
-            Predicate = r => r.Tags.Contains("live")
+            Predicate = _ => false,
         });
 
         return app;
@@ -113,6 +111,7 @@ public static class Extensions
         {
             writer.WriteStartObject();
             writer.WriteString("status", report.Status.ToString());
+            writer.WriteString("totalDuration", report.TotalDuration.ToString());
             writer.WriteStartObject("results");
 
             foreach (var entry in report.Entries)
@@ -120,8 +119,12 @@ public static class Extensions
                 writer.WriteStartObject(entry.Key.Replace(" ", string.Empty));
                 writer.WriteString("status",
                     entry.Value.Status.ToString());
+                writer.WriteString("duration",
+                    entry.Value.Duration.ToString());
                 writer.WriteString("description",
                     entry.Value.Description);
+                writer.WriteString("exception",
+                    entry.Value.Exception?.ToString());
                 writer.WriteStartObject("data");
 
                 foreach (var item in entry.Value.Data)
