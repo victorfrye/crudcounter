@@ -12,5 +12,5 @@
     <Build />
     <Deploy />
   </Project>
-  <Project Path="tests/Integrations/Testing.Integrations.csproj" />
+  <Project Path="test/Integrations/Testing.Integrations.csproj" />
 </Solution>

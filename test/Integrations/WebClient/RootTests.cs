@@ -1,6 +1,6 @@
 namespace VictorFrye.Counter.Testing.Integrations.WebClient;
 
-public class WebClientRootTests : TestAppHost
+public class RootTests : TestAppHost
 {
     [Fact]
     public async Task GetResourceRootReturnsOkStatusCode()

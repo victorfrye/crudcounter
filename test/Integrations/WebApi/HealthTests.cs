@@ -1,6 +1,6 @@
 namespace VictorFrye.Counter.Testing.Integrations.WebApi;
 
-public class ApiHealthTests : TestAppHost
+public class HealthTests : TestAppHost
 {
     [Fact]
     public async Task GetLivenessReturnsOkStatusCode()

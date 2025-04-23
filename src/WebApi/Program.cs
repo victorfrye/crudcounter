@@ -32,7 +32,7 @@ builder.Services.AddOpenApi(static options =>
         {
             document.Info = new()
             {
-                Title = "Counter API",
+                Title = "Resources API",
                 Version = "v1",
                 Description = "API for managing resource counters."
             };
