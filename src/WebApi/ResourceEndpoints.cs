@@ -41,12 +41,13 @@ public static class ResourceEndpoints
 
             if (existingResource is null)
             {
-                db.Resources.Add(new Resource
+                existingResource = new Resource
                 {
                     Id = id,
                     Name = resource.Name,
                     Count = resource.Count
-                });
+                };
+                db.Resources.Add(existingResource);
             }
             else
             {
