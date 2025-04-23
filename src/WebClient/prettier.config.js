@@ -4,11 +4,7 @@ const config = {
   tabWidth: 2,
   semi: true,
   singleQuote: true,
-  importOrder: [
-    '^react$|^react-dom',
-    '<THIRD_PARTY_MODULES>',
-    '^@app/',
-  ],
+  importOrder: ['^react$|^react-dom', '<THIRD_PARTY_MODULES>', '^@counter/'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };

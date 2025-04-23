@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.1.0" />
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.0" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,21 +10,21 @@
 
     <IsAspireHost>true</IsAspireHost>
 
-    <AssemblyName>VictorFrye.SimpleCrud.AppHost</AssemblyName>
-    <RootNamespace>VictorFrye.SimpleCrud.AppHost</RootNamespace>
+    <AssemblyName>VictorFrye.Counter.AppHost</AssemblyName>
+    <RootNamespace>VictorFrye.Counter.AppHost</RootNamespace>
 
     <UserSecretsId>2bad5002-9943-41cd-9a77-ec579ba4a680</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiService\ApiService.csproj" />
+    <ProjectReference Include="..\WebApi\WebApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
-    <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.1.0" />
-    <PackageReference Include="Aspire.Hosting.Redis" Version="9.1.0" />
-    <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.1.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0" />
+    <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.2.0" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="9.2.0" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.2.0" />
   </ItemGroup>
 
   <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
@@ -33,8 +33,10 @@
     </ItemGroup>
 
     <!-- Install npm packages if node_modules is missing -->
-    <Message Importance="Normal" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
-    <Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
+    <Message Importance="Normal" Text="Installing npm packages for %(PackageJsons.RelativeDir)"
+      Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
+    <Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)"
+      Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')" />
   </Target>
 
 </Project>

@@ -1,23 +1,23 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var sql = builder.AddSqlServer("sql")
-                .AddDatabase("db");
+                 .AddDatabase("db");
 
 var cache = builder.AddRedis("cache");
 
-var api = builder.AddProject<Projects.ApiService>("api")
-    .WithReference(sql)
-    .WaitFor(sql)
-    .WithReference(cache)
-    .WaitFor(cache)
-    .WithHttpsHealthCheck("/alive", 200)
-    .WithExternalHttpEndpoints();
+var api = builder.AddProject<Projects.WebApi>("api")
+                 .WithReference(sql)
+                 .WaitFor(sql)
+                 .WithReference(cache)
+                 .WaitFor(cache)
+                 .WithHttpsHealthCheck("/alive")
+                 .WithExternalHttpEndpoints();
 
 builder.AddNpmApp("client", "../WebClient", "dev")
-    .WithReference(api)
-    .WaitFor(api)
-    .WithEnvironment("VITE_API_BASEURL", api.GetEndpoint("https"))
-    .WithHttpEndpoint(env: "VITE_PORT")
-    .WithExternalHttpEndpoints();
+       .WithReference(api)
+       .WaitFor(api)
+       .WithEnvironment("NEXT_PUBLIC_API_BASEURL", api.GetEndpoint("https"))
+       .WithHttpEndpoint(env: "PORT")
+       .WithExternalHttpEndpoints();
 
 await builder.Build().RunAsync();

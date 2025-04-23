@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/WebApi/WebApi.csproj" />
+  <Project Path="src/AppHost/AppHost.csproj" />
+  <Project Path="src/ServiceDefaults/ServiceDefaults.csproj" />
+  <Project Path="src/WebClient/WebClient.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="tests/Integrations/Testing.Integrations.csproj" />
+</Solution>

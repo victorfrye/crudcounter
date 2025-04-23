@@ -8,12 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace VictorFrye.SimpleCrud.Extensions.ServiceDefaults;
+namespace VictorFrye.Counter.ServiceDefaults;
 
 public static class Extensions
 {
