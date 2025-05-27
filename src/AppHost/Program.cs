@@ -10,7 +10,7 @@ var api = builder.AddProject<Projects.WebApi>("api")
                  .WaitFor(sql)
                  .WithReference(cache)
                  .WaitFor(cache)
-                 .WithHttpsHealthCheck("/alive")
+                 .WithHttpHealthCheck("/alive")
                  .WithExternalHttpEndpoints();
 
 builder.AddNpmApp("client", "../WebClient", "dev")

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.0" />
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.3.0" />
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,8 +10,8 @@
 
     <IsAspireHost>true</IsAspireHost>
 
-    <AssemblyName>VictorFrye.Counter.AppHost</AssemblyName>
-    <RootNamespace>VictorFrye.Counter.AppHost</RootNamespace>
+    <AssemblyName>VictorFrye.CrudCounter.AppHost</AssemblyName>
+    <RootNamespace>VictorFrye.CrudCounter.AppHost</RootNamespace>
 
     <UserSecretsId>2bad5002-9943-41cd-9a77-ec579ba4a680</UserSecretsId>
   </PropertyGroup>
@@ -21,10 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0" />
-    <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.2.0" />
-    <PackageReference Include="Aspire.Hosting.Redis" Version="9.2.0" />
-    <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.2.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.0" />
+    <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.3.0" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="9.3.0" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="9.3.0" />
   </ItemGroup>
 
   <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">

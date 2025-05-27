@@ -7,8 +7,8 @@
 
     <IsAspireSharedProject>true</IsAspireSharedProject>
 
-    <AssemblyName>VictorFrye.Counter.ServiceDefaults</AssemblyName>
-    <RootNamespace>VictorFrye.Counter.ServiceDefaults</RootNamespace>
+    <AssemblyName>VictorFrye.CrudCounter.Extensions.ServiceDefaults</AssemblyName>
+    <RootNamespace>VictorFrye.CrudCounter.Extensions.ServiceDefaults</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ const config = {
   tabWidth: 2,
   semi: true,
   singleQuote: true,
-  importOrder: ['^react$|^react-dom', '<THIRD_PARTY_MODULES>', '^@counter/'],
+  importOrder: ['^react$|^react-dom', '<THIRD_PARTY_MODULES>', '^@crudcounter/'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };

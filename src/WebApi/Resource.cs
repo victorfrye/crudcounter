@@ -1,6 +1,6 @@
-﻿namespace VictorFrye.Counter.WebApi;
+﻿namespace VictorFrye.CrudCounter.WebApi;
 
-public class Resource
+public record Resource
 {
     public Guid Id { get; init; } = Guid.CreateVersion7();
 

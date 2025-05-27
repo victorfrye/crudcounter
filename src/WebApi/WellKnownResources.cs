@@ -1,6 +1,6 @@
 using System.Collections.Frozen;
 
-namespace VictorFrye.Counter.WebApi;
+namespace VictorFrye.CrudCounter.WebApi;
 
 public static class WellKnownResources
 {

@@ -17,7 +17,7 @@
     "allowJs": true,
     "incremental": true,
     "paths": {
-      "@counter/*": ["./*"]
+      "@crudcounter/*": ["./app/*"]
     },
 
     /* Linting */
@@ -38,6 +38,7 @@
     "**/*.ts",
     "**/*.tsx",
     "globals.d.ts",
+    "next.config.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],

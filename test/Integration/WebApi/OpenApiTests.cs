@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 
-namespace VictorFrye.Counter.Testing.Integrations.WebApi;
+
+namespace VictorFrye.CrudCounter.Integration.Tests.WebApi;
 
 public class OpenApiTests : TestAppHost
 {
@@ -8,14 +9,15 @@ public class OpenApiTests : TestAppHost
     public async Task GetOpenApiReturnsJsonDocument()
     {
         var http = App.CreateHttpClient(Resources.WebApi);
-        await ResourceNotificationService.WaitForResourceAsync(Resources.WebApi, KnownResourceStates.Running).WaitAsync(TimeSpan.FromSeconds(30));
-        var response = await http.GetAsync("/openapi/v1.json");
+        await ResourceNotificationService.WaitForResourceAsync(Resources.WebApi, KnownResourceStates.Running, TestContext.Current.CancellationToken)
+                                         .WaitAsync(TimeSpan.FromSeconds(30), TestContext.Current.CancellationToken);
+        var response = await http.GetAsync("/openapi/v1.json", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var stream = await response.Content.ReadAsStreamAsync();
+        var stream = await response.Content.ReadAsStreamAsync(TestContext.Current.CancellationToken);
 
-        var result = await OpenApiDocument.LoadAsync(stream);
+        var result = await OpenApiDocument.LoadAsync(stream, null, null, TestContext.Current.CancellationToken);
 
         Assert.NotNull(result.Document);
         Assert.Equal("Resources API", result.Document.Info.Title);
@@ -30,16 +32,16 @@ public class OpenApiTests : TestAppHost
         Assert.Contains(resourcesPath.Operations, o => o.Key == HttpMethod.Get);
         Assert.Contains(resourcesPath.Operations, o => o.Key == HttpMethod.Post);
 
-        Assert.Contains(result.Document.Paths, p => p.Key == "/api/resources/{id:guid}");
-        var resourceByIdPath = result.Document.Paths["/api/resources/{id:guid}"];
+        Assert.Contains(result.Document.Paths, p => p.Key == "/api/resources/{id}");
+        var resourceByIdPath = result.Document.Paths["/api/resources/{id}"];
         Assert.NotNull(resourceByIdPath.Operations);
         Assert.Equal(3, resourceByIdPath.Operations.Count);
         Assert.Contains(resourceByIdPath.Operations, o => o.Key == HttpMethod.Get);
         Assert.Contains(resourceByIdPath.Operations, o => o.Key == HttpMethod.Put);
         Assert.Contains(resourceByIdPath.Operations, o => o.Key == HttpMethod.Delete);
 
-        Assert.Contains(result.Document.Paths, p => p.Key == "/api/resources/{id:guid}/count");
-        var resourceCountPath = result.Document.Paths["/api/resources/{id:guid}/count"];
+        Assert.Contains(result.Document.Paths, p => p.Key == "/api/resources/{id}/count/{count}");
+        var resourceCountPath = result.Document.Paths["/api/resources/{id}/count/{count}"];
         Assert.NotNull(resourceCountPath.Operations);
         Assert.Single(resourceCountPath.Operations);
         Assert.Contains(resourceCountPath.Operations, o => o.Key == HttpMethod.Patch);
