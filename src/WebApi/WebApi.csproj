@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <AssemblyName>VictorFrye.Counter.WebApi</AssemblyName>
-    <RootNamespace>VictorFrye.Counter.WebApi</RootNamespace>
+    <AssemblyName>VictorFrye.CrudCounter.WebApi</AssemblyName>
+    <RootNamespace>VictorFrye.CrudCounter.WebApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

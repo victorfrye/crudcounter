@@ -12,7 +12,7 @@ using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
-namespace VictorFrye.Counter.ServiceDefaults;
+namespace VictorFrye.CrudCounter.Extensions.ServiceDefaults;
 
 public static class Extensions
 {

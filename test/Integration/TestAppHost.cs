@@ -1,12 +1,12 @@
 using Aspire.Hosting;
 
-namespace VictorFrye.Counter.Testing.Integrations;
+namespace VictorFrye.CrudCounter.Integration.Tests;
 
 public abstract class TestAppHost : IAsyncLifetime
 {
-    protected DistributedApplication App = null!;
+    public DistributedApplication App = null!;
 
-    protected ResourceNotificationService ResourceNotificationService => App.Services.GetRequiredService<ResourceNotificationService>();
+    public ResourceNotificationService ResourceNotificationService => App.Services.GetRequiredService<ResourceNotificationService>();
 
     public static class Resources
     {
@@ -14,7 +14,7 @@ public abstract class TestAppHost : IAsyncLifetime
         public const string WebClient = "client";
     }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         var appHost = await DistributedApplicationTestingBuilder.CreateAsync<Projects.AppHost>();
 
@@ -22,5 +22,9 @@ public abstract class TestAppHost : IAsyncLifetime
         await App.StartAsync();
     }
 
-    public async Task DisposeAsync() => await App.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await App.DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace VictorFrye.Counter.WebApi;
+namespace VictorFrye.CrudCounter.WebApi;
 
-public static class ResourceDbSeed
+public static class SeedExtensions
 {
     public static void SeedMockData(this DbContext context)
     {

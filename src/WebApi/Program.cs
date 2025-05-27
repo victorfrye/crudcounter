@@ -2,8 +2,8 @@ using System.Text.Json;
 
 using Microsoft.OpenApi.Models;
 
-using VictorFrye.Counter.WebApi;
-using VictorFrye.Counter.ServiceDefaults;
+using VictorFrye.CrudCounter.Extensions.ServiceDefaults;
+using VictorFrye.CrudCounter.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 

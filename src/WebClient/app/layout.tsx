@@ -1,13 +1,12 @@
 import { ReactNode } from 'react';
 
-import './globals.css';
 import type { Metadata } from 'next';
 
-import { Profile } from '@counter/components/layout';
-import { DarkModeProvider, ThemeProvider } from '@counter/components/theme';
+import '@crudcounter/globals.css';
+import { DarkModeProvider, ThemeProvider } from '@crudcounter/theme';
 
 export const metadata: Metadata = {
-  title: 'Counter | Plus Ultra',
+  title: 'CRUD Counter | Plus Ultra',
   description: 'A simple counter application',
 };
 
@@ -21,9 +20,7 @@ export const RootLayout = ({
       <body>
         <div id="root">
           <DarkModeProvider>
-            <ThemeProvider>
-              <Profile>{children}</Profile>
-            </ThemeProvider>
+            <ThemeProvider>{children}</ThemeProvider>
           </DarkModeProvider>
         </div>
       </body>
