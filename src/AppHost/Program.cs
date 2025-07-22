@@ -1,5 +1,7 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+builder.AddDockerComposeEnvironment("docker");
+
 var sql = builder.AddSqlServer("sql")
                  .AddDatabase("db");
 
@@ -11,7 +13,8 @@ var api = builder.AddProject<Projects.WebApi>("api")
                  .WithReference(cache)
                  .WaitFor(cache)
                  .WithHttpHealthCheck("/alive")
-                 .WithExternalHttpEndpoints();
+                 .WithExternalHttpEndpoints()
+                 .PublishAsDockerFile(b => b.WithDockerfile("../..", "./src/WebApi/Dockerfile"));
 
 builder.AddNpmApp("client", "../WebClient", "dev")
        .WithReference(api)

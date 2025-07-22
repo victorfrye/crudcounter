@@ -8,9 +8,5 @@
   <Project Path="src/WebApi/WebApi.csproj" />
   <Project Path="src/AppHost/AppHost.csproj" />
   <Project Path="src/ServiceDefaults/ServiceDefaults.csproj" />
-  <Project Path="src/WebClient/WebClient.esproj">
-    <Build />
-    <Deploy />
-  </Project>
   <Project Path="test/Integration/Integration.Tests.csproj" />
 </Solution>
