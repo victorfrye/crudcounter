@@ -3,7 +3,7 @@ using System.Text.Json;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Resource = VictorFrye.CrudCounter.WebApi.Resource;
+using Resource = VictorFrye.CrudCounter.Core.Resource;
 
 namespace VictorFrye.CrudCounter.Integration.Tests.WebApi;
 

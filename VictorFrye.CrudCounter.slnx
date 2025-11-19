@@ -3,10 +3,15 @@
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path="global.json" />
+    <File Path="nuget.config" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="src/WebApi/WebApi.csproj" />
   <Project Path="src/AppHost/AppHost.csproj" />
+  <Project Path="src/Core/Core.csproj" />
+  <Project Path="src/Seeder/Seeder.csproj" />
   <Project Path="src/ServiceDefaults/ServiceDefaults.csproj" />
+  <Project Path="src/WebApi/WebApi.csproj" />
   <Project Path="test/Integration/Integration.Tests.csproj" />
+  <Project Path="test/WebApi/WebApi.Tests.csproj" />
 </Solution>

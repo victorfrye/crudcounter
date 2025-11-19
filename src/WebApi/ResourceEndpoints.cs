@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+using VictorFrye.CrudCounter.Core;
 
 namespace VictorFrye.CrudCounter.WebApi;
 
@@ -9,8 +9,8 @@ public static class ResourceEndpoints
     public static IEndpointRouteBuilder MapResourceEndpoints(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost(BaseRoute, PostResource);
-        endpoints.MapGet(BaseRoute, GetResources);
-        endpoints.MapGet($"{BaseRoute}/{{id:guid}}", GetResourceById);
+        endpoints.MapGet(BaseRoute, GetResources).CacheOutput(p => p.Expire(TimeSpan.FromSeconds(10)));
+        endpoints.MapGet($"{BaseRoute}/{{id:guid}}", GetResourceById).CacheOutput(p => p.Expire(TimeSpan.FromSeconds(10)));
         endpoints.MapPut($"{BaseRoute}/{{id:guid}}", PutResource);
         endpoints.MapPatch($"{BaseRoute}/{{id:guid}}/count/{{count:int}}", PatchResourceCount);
         endpoints.MapDelete($"{BaseRoute}/{{id:guid}}", DeleteResource);
@@ -18,80 +18,45 @@ public static class ResourceEndpoints
         return endpoints;
     }
 
-    public static async Task<IResult> PostResource(Resource resource, ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> PostResource(Resource resource, IResourceService service, CancellationToken cancellationToken)
     {
-        db.Resources.Add(resource);
-        await db.SaveChangesAsync(cancellationToken);
+        await service.CreateResource(resource, cancellationToken);
 
         return Results.Created($"{BaseRoute}/{resource.Id}", resource);
     }
 
-    public static async Task<IResult> GetResources(ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> GetResources(IResourceService service, CancellationToken cancellationToken)
     {
-        var resources = await db.Resources.ToListAsync(cancellationToken);
+        var resources = await service.RetrieveResources(cancellationToken);
+
         return Results.Ok(resources);
     }
 
-    public static async Task<IResult> GetResourceById(Guid id, ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> GetResourceById(Guid id, IResourceService service, CancellationToken cancellationToken)
     {
-        var resource = await db.Resources.FindAsync([id], cancellationToken);
+        var resource = await service.RetrieveResourceById(id, cancellationToken);
+
         return resource is null ? Results.NotFound(id) : Results.Ok(resource);
     }
 
-    public static async Task<IResult> PutResource(Guid id, Resource resource, ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> PutResource(Guid id, Resource resource, IResourceService service, CancellationToken cancellationToken)
     {
-        var existingResource = await db.Resources.FindAsync([id], cancellationToken);
+        var updatedResource = await service.UpdateResource(id, resource, cancellationToken);
 
-        if (existingResource is null)
-        {
-            existingResource = new Resource
-            {
-                Id = id,
-                Name = resource.Name,
-                Count = resource.Count
-            };
-            db.Resources.Add(existingResource);
-        }
-        else
-        {
-            existingResource.Name = resource.Name;
-            existingResource.Count = resource.Count;
-            db.Resources.Update(existingResource);
-        }
-
-        await db.SaveChangesAsync(cancellationToken);
-
-        return Results.Ok(existingResource);
+        return Results.Ok(updatedResource);
     }
 
-    public static async Task<IResult> PatchResourceCount(Guid id, int count, ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> PatchResourceCount(Guid id, int count, IResourceService service, CancellationToken cancellationToken)
     {
-        var resource = await db.Resources.FindAsync([id], cancellationToken);
+        var updatedResource = await service.UpdateResourceCount(id, count, cancellationToken);
 
-        if (resource is null)
-        {
-            return Results.NotFound(id);
-        }
-
-        resource.Count = count;
-        db.Resources.Update(resource);
-        await db.SaveChangesAsync(cancellationToken);
-
-        return Results.Ok(resource);
+        return updatedResource is null ? Results.NotFound(id) : Results.Ok(updatedResource);
     }
 
-    public static async Task<IResult> DeleteResource(Guid id, ResourceDbContext db, CancellationToken cancellationToken)
+    public static async Task<IResult> DeleteResource(Guid id, IResourceService service, CancellationToken cancellationToken)
     {
-        var resource = await db.Resources.FindAsync([id], cancellationToken);
+        var result = await service.DeleteResource(id, cancellationToken);
 
-        if (resource is null)
-        {
-            return Results.NotFound(id);
-        }
-
-        db.Resources.Remove(resource);
-        await db.SaveChangesAsync(cancellationToken);
-
-        return Results.NoContent();
+        return result ? Results.NoContent() : Results.NotFound(id);
     }
 }

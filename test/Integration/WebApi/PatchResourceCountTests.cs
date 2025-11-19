@@ -1,7 +1,8 @@
 using System.Text.Json;
 
-using VictorFrye.CrudCounter.WebApi;
-using Resource = VictorFrye.CrudCounter.WebApi.Resource;
+using VictorFrye.CrudCounter.Core;
+
+using Resource = VictorFrye.CrudCounter.Core.Resource;
 
 namespace VictorFrye.CrudCounter.Integration.Tests.WebApi;
 

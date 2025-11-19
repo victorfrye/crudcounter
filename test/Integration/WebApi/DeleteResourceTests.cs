@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-using VictorFrye.CrudCounter.WebApi;
+using VictorFrye.CrudCounter.Core;
 
 namespace VictorFrye.CrudCounter.Integration.Tests.WebApi;
 

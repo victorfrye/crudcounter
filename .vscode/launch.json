@@ -12,6 +12,17 @@
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:pickProcess}"
+    },
+    {
+      "name": "Containers: Node.js Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "platform": "node",
+      "node": {
+        "package": "${workspaceFolder}/src/WebClient/package.json",
+        "localRoot": "${workspaceFolder}/src/WebClient"
+      }
     }
   ]
 }

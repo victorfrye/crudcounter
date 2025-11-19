@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace VictorFrye.CrudCounter.WebApi;
+namespace VictorFrye.CrudCounter.Core;
 
 public class ResourceDbContext(DbContextOptions<ResourceDbContext> options) : DbContext(options)
 {

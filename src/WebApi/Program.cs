@@ -1,7 +1,8 @@
 using System.Text.Json;
 
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
+using VictorFrye.CrudCounter.Core;
 using VictorFrye.CrudCounter.Extensions.ServiceDefaults;
 using VictorFrye.CrudCounter.WebApi;
 
@@ -10,12 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.AddRedisOutputCache("cache");
-builder.AddSqlServerDbContext<ResourceDbContext>("db",
-    configureSettings: static settings => settings.DisableRetry = true,
-    configureDbContextOptions: static options =>
-        options.UseSeeding(static (context, _) => context.SeedMockData())
-               .UseAsyncSeeding(static async (context, _, cancellationToken) => await context.SeedMockDataAsync(cancellationToken))
-);
+builder.AddNpgsqlDbContext<ResourceDbContext>("db");
+
+builder.Services.AddResourceServices();
 
 builder.Services.AddProblemDetails();
 
@@ -41,6 +39,7 @@ builder.Services.AddOpenApi(static options =>
     options.AddOperationTransformer(static async (operation, _, cancellationToken) =>
         await Task.Run(() =>
         {
+            operation.Responses ??= [];
             operation.Responses.Add("400", new OpenApiResponse { Description = "Bad request" });
             operation.Responses.Add("500", new OpenApiResponse { Description = "Internal server error" });
         }, cancellationToken));
@@ -52,20 +51,10 @@ app.UseExceptionHandler();
 app.UseOutputCache();
 
 app.MapDefaultEndpoints();
-app.MapOpenApi().CacheOutput();
+app.MapOpenApi().CacheOutput(p => p.Expire(TimeSpan.FromDays(1)));
 
 app.MapResourceEndpoints();
 
 app.UseHttpsRedirection();
-
-if (app.Environment.IsDevelopment())
-{
-    using var scope = app.Services.CreateScope();
-
-    var services = scope.ServiceProvider;
-    var dbContext = services.GetRequiredService<ResourceDbContext>();
-
-    await dbContext.Database.EnsureCreatedAsync();
-}
 
 await app.RunAsync();
